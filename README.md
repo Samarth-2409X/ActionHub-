@@ -15,6 +15,9 @@ Press Enter to quickly add a task
 ### **Technologies Used**
 
 HTML5
+<br>
 CSS3
+<br>
 Vanilla JavaScript
+<br>
 localStorage (for data persistence)
