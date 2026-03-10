@@ -1,6 +1,6 @@
-Project Title & Description
+# **Project Title & Description**
 
-Name: ActionHub - Task Manager
+**Name**: ActionHub - Task Manager
 One line description: "A simple browser-based task manager built with HTML, CSS, and JavaScript."
 
 Features List
@@ -11,3 +11,10 @@ Filter tasks: All, Today, Upcoming, Overdue
 Tasks are saved in localStorage (survive page refresh)
 Color-coded cards for overdue and today's tasks
 Press Enter to quickly add a task
+
+Technologies Used
+
+HTML5
+CSS3
+Vanilla JavaScript
+localStorage (for data persistence)
