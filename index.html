@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ActionHub</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+
+    
+    <h1>ActionHub</h1>
+
+    
+    <div class="input-row">
+      <input type="text" id="task-input" placeholder="Enter task title" />
+      <input type="date" id="due-input" />
+      <button onclick="addTask()">Add Task</button>
+    </div>
+
+    
+    <div class="edit-row" id="edit-row">
+      <input type="text" id="edit-title" placeholder="Edit task title" />
+      <input type="date" id="edit-due" />
+      <button onclick="saveEdit()">Save</button>
+      <button class="cancel-btn" onclick="cancelEdit()">Cancel</button>
+    </div>
+
+    
+    <div class="filters">
+      <button class="filter-btn active" onclick="setFilter('all', this)">All Tasks (<span id="count-all">0</span>)</button>
+      <button class="filter-btn" onclick="setFilter('today', this)">Today (<span id="count-today">0</span>)</button>
+      <button class="filter-btn" onclick="setFilter('upcoming', this)">Upcoming (<span id="count-upcoming">0</span>)</button>
+      <button class="filter-btn" onclick="setFilter('overdue', this)">Overdue (<span id="count-overdue">0</span>)</button>
+    </div>
+
+    
+    <div id="task-list"></div>
+
+    
+    <p class="empty-msg" id="empty-msg">No tasks found. Add one above!</p>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
