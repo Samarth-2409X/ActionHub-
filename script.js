@@ -115,3 +115,27 @@ function saveEdit(){
   renderTask();
 }
 
+function cancleEdit(){
+  editingId = null;
+
+  document.getElementById("edit-title").value = "";
+  document.getElementById("edit-due").value = "";
+
+  document.getElementById("edit-row").classList.remove("active");
+}
+
+
+function setFilter(filter, button){
+  let currentFilter = filter;
+
+  let button = document.querySelectorAll(".filter-btn");
+
+  button.forEach(function(btn) {
+    btn.classList.remove("active");
+  })
+
+  button.classList.add("active");
+
+  renderTask();
+}
+
