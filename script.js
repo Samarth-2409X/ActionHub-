@@ -139,3 +139,16 @@ function setFilter(filter, button){
   renderTask();
 }
 
+function getTaskStatus(dueDate){
+  let today = Date.now();
+
+  if(!dueDate){
+    return "upcomming";
+  }
+
+  if(dueDate < today) return "overDue"
+
+  if(dueDate == today) return "today"
+
+  return "upcomming"
+}
