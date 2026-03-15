@@ -1,240 +1,117 @@
+let storedData = localStorage.getItem("actionhub-tasks");
 
-let tasks = JSON.parse(localStorage.getItem('actionhub-tasks') || '[]');
+if(storedData){
+  tasks = JSON.parse(storedData);
+}
+else{
+  tasks = [];
+}
 
-
-let currentFilter = 'all';
-
+let currentFilter = "all";
 
 let editingId = null;
 
+function saveTask(){
 
+  let dtaString = JSON.stringify(tasks);
 
-function saveTasks() {
-  localStorage.setItem('actionhub-tasks', JSON.stringify(tasks));
+  localStorage.setItem("actionhub-tasks", dtaString);
 }
 
+function getTodaysData(){
 
+  let today = new Date();
 
-function getToday() {
-  return new Date().toISOString().split('T')[0];
+  let dateString = today.toISOString().split("T")[0];
+
+  return dateString;
 }
 
+function addTasks(){
+  let titleInput = document.getElementById("task-input");
+  let dueinput = document.getElementById("due-input");
 
+  let title = titleInput.value.trim();
+  let dueDate = dueinput.value;
 
-function getStatus(dueDate) {
-  if (!dueDate) return 'upcoming';
-
-  const today = getToday();
-
-  if (dueDate < today) return 'overdue';
-  if (dueDate === today) return 'today';
-  return 'upcoming';
-}
-
-
-
-function addTask() {
-  const titleInput = document.getElementById('task-input');
-  const dueInput = document.getElementById('due-input');
-
-  const title = titleInput.value.trim();
-  const due = dueInput.value;
-
-  
-  if (!title) {
-    alert('Please enter a task title.');
+  if(title == ""){
+    alert("Please enter the title");
     return;
   }
 
-  
-  const newTask = {
-    id: Date.now(),  
-    title: title,
-    due: due
-  };
+  let newTask = {
+    id:Date.now(),
+    title:title,
+    due:dueDate
+  }
 
-  
   tasks.unshift(newTask);
 
- 
-  saveTasks();
-  renderTasks();
+  saveTask();
+  renderTask();
 
-  
-  titleInput.value = '';
-  dueInput.value = '';
+  titleInput.value = "",
+  dueinput.value = ""
 }
 
+function DeleteTask(id){
+  tasks = tasks.filter(function(task){
+    if(task.id != id){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
 
-
-function deleteTask(id) {
-  
-  tasks = tasks.filter(function(task) {
-    return task.id !== id;
-  });
-
-  saveTasks();
-  renderTasks();
+  saveTask();
+  renderTask();
 }
 
+function startEdit(id){
 
+  let task = tasks.find(function(t){
+    return t.id == id;
+  })
 
-function startEdit(id) {
-  
-  const task = tasks.find(function(t) {
-    return t.id === id;
-  });
+  if(!task){
+    return;
+  }
 
-  if (!task) return;
-
-  
   editingId = id;
 
-  
-  document.getElementById('edit-title').value = task.title;
-  document.getElementById('edit-due').value = task.due || '';
+  document.getElementById("edit-title").value = task.title;
+  document.getElementById("edit-due").value = task.due;
 
-  
-  document.getElementById('edit-row').classList.add('active');
+  document.getElementById("edit-row").classList.add("active");
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+function saveEdit(){
+  let newTitle = document.getElementById("edit-title").value.trim();
+  let newDue = document.getElementById("edit-due").value;
 
-function saveEdit() {
-  const newTitle = document.getElementById('edit-title').value.trim();
-  const newDue = document.getElementById('edit-due').value;
-
-  if (!newTitle) {
-    alert('Title cannot be empty.');
+  if(newTitle == ""){
+    alert("Title canot be empty");
     return;
   }
 
-  
-  tasks = tasks.map(function(task) {
-    if (task.id === editingId) {
-      return { id: task.id, title: newTitle, due: newDue };
+  tasks = tasks.map(function(task){
+    if(task.id === editingId){
+
+      return {
+        id:task.id,
+        title: newTitle,
+        due: newDue
+      }
     }
-    return task;
+    else{
+      return task;
+    }
   });
 
-  saveTasks();
-  cancelEdit();   
-  renderTasks();  
+  saveTask();
+  cancleEdit();
+  renderTask();
 }
 
-
-
-function cancelEdit() {
-  editingId = null;
-
-  
-  document.getElementById('edit-title').value = '';
-  document.getElementById('edit-due').value = '';
-  document.getElementById('edit-row').classList.remove('active');
-}
-
-
-
-function setFilter(filter, clickedButton) {
-  currentFilter = filter;
-
-  
-  const allButtons = document.querySelectorAll('.filter-btn');
-  allButtons.forEach(function(btn) {
-    btn.classList.remove('active');
-  });
-  clickedButton.classList.add('active');
-
-  renderTasks();
-}
-
-
-
-function renderTasks() {
-  const today = getToday();
-
-  
-  const totalCount    = tasks.length;
-  const todayCount    = tasks.filter(t => t.due === today).length;
-  const upcomingCount = tasks.filter(t => t.due && t.due > today).length;
-  const overdueCount  = tasks.filter(t => t.due && t.due < today).length;
-
-  
-  document.getElementById('count-all').textContent      = totalCount;
-  document.getElementById('count-today').textContent    = todayCount;
-  document.getElementById('count-upcoming').textContent = upcomingCount;
-  document.getElementById('count-overdue').textContent  = overdueCount;
-
-  
-  let filteredTasks;
-
-  if (currentFilter === 'today') {
-    filteredTasks = tasks.filter(t => t.due === today);
-
-  } else if (currentFilter === 'upcoming') {
-    filteredTasks = tasks.filter(t => t.due && t.due > today);
-
-  } else if (currentFilter === 'overdue') {
-    filteredTasks = tasks.filter(t => t.due && t.due < today);
-
-  } else {
-    filteredTasks = tasks; 
-  }
-
-  const taskList = document.getElementById('task-list');
-  const emptyMsg = document.getElementById('empty-msg');
-
-  
-  if (filteredTasks.length === 0) {
-    taskList.innerHTML = '';
-    emptyMsg.style.display = 'block';
-    return;
-  }
-
-  emptyMsg.style.display = 'none';
-
-  
-  let html = '';
-
-  filteredTasks.forEach(function(task) {
-    const status = getStatus(task.due);
-
-    
-    let dueClass = '';
-    if (status === 'overdue') dueClass = 'overdue-text';
-    if (status === 'today')   dueClass = 'today-text';
-
-    
-    const dueDisplay = task.due ? 'Due: ' + task.due : 'No due date';
-
-    html += `
-      <div class="task-card ${status}">
-        <div class="task-info">
-          <div class="task-title">${task.title}</div>
-          <div class="task-due ${dueClass}">${dueDisplay}</div>
-        </div>
-        <div class="task-actions">
-          <button class="edit-btn" onclick="startEdit(${task.id})">✏ Edit</button>
-          <button class="delete-btn" onclick="deleteTask(${task.id})">🗑 Delete</button>
-        </div>
-      </div>
-    `;
-  });
-
-  taskList.innerHTML = html;
-}
-
-
-
-document.getElementById('task-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') addTask();
-});
-
-document.getElementById('edit-title').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') saveEdit();
-});
-
-
-
-renderTasks();
