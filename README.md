@@ -79,7 +79,7 @@ This project was built to practice core **JavaScript concepts**:
 
 ## 👨‍💻 Author
 
-**Samarth Shirahatti**
+**Samarth**
 GitHub: [Samarth-2409X](https://github.com/Samarth-2409X)
 ---
 
