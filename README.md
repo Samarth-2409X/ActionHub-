@@ -85,4 +85,4 @@ GitHub: [Samarth-2409X](https://github.com/Samarth-2409X)
 
 ## ⭐ If you like this project
 
-Give the repository a **star ⭐ on GitHub**.
+Give it a star ⭐ on GitHub and feel free to contribute!
